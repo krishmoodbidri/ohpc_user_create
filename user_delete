@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+#
+uname=$1
+
+echo "***** USER DELETE on OHPC *****"
+sudo userdel -f -r $uname
+echo "--> User Deleted."
+
+sudo wwsh file resync passwd group shadow
+echo "--> WareWulf Updation Completed."
+
+echo "***** USER DELETE on OOD *****"
+ssh ood sudo userdel -f $uname
+echo "--> User Deleted."

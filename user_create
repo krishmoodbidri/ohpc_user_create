@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+#
+uname=$1
+fname=$2
+
+echo "***** USER CREATE on OHPC *****"
+sudo useradd -m -s "/bin/bash" -U -d "/home/$uname" -c "$fname" $uname
+echo "--> User Created."
+
+echo "$uname" | sudo passwd --stdin $uname
+echo "--> User Password Created."
+
+sudo wwsh file resync passwd group shadow
+echo "--> WareWulf Entry Completed."
+
+sudo sacctmgr -i add user name=$uname account="xcbc-users"
+echo "--> Slurm Entry Completed."
+
+echo "***** USER CREATE on OOD *****"
+uid=`sudo id -u "$uname"`
+gid=`sudo id -g "$uname"`
+
+ssh ood sudo useradd -M -s "/bin/bash" -u $uid -U -c "$fname" $uname
+echo "--> User Created."
+
+## THIS SECTION WILL BE TRANSFER TO OTHER PLACE.
+#ssh ood sudo scl enable httpd24 -- htpasswd -b /opt/rh/httpd24/root/etc/httpd/.htpasswd $uname $uname
+#echo "--> Apache Entry Completed."
