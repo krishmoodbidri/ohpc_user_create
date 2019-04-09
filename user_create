@@ -5,21 +5,21 @@ uname=$1
 fname=$2
 
 echo "***** USER CREATE on OHPC *****"
-sudo useradd -m -s "/bin/bash" -U -d "/home/$uname" -c "$fname" $uname
+useradd -m -s "/bin/bash" -U -d "/home/$uname" -c "$fname" $uname
 echo "--> User Created."
 
-echo "$uname" | sudo passwd --stdin $uname
+echo "$uname" | passwd --stdin $uname
 echo "--> User Password Created."
 
-sudo wwsh file resync passwd group shadow
+wwsh file resync passwd group shadow
 echo "--> WareWulf Entry Completed."
 
-sudo sacctmgr -i add user name=$uname account="xcbc-users"
+sacctmgr -i add user name=$uname account="xcbc-users"
 echo "--> Slurm Entry Completed."
 
 echo "***** USER CREATE on OOD *****"
-uid=`sudo id -u "$uname"`
-gid=`sudo id -g "$uname"`
+uid=`id -u "$uname"`
+gid=`id -g "$uname"`
 
 ssh ood sudo useradd -M -s "/bin/bash" -u $uid -U -c "$fname" $uname
 echo "--> User Created."
