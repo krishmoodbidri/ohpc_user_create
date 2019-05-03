@@ -5,6 +5,7 @@ uname=$1
 fname=$2
 
 echo "***** USER CREATE on OHPC *****"
+echo useradd -m -s "/bin/bash" -U -d "/home/$uname" -c "$fname" $uname
 useradd -m -s "/bin/bash" -U -d "/home/$uname" -c "$fname" $uname
 echo "--> User Created."
 
@@ -21,6 +22,5 @@ echo "***** USER CREATE on OOD *****"
 uid=`id -u "$uname"`
 gid=`id -g "$uname"`
 
-su - vagrant -c 'ssh ood sudo useradd -M -s "/bin/bash" -u '$uid' -U -c '$fname' '$uname''
+su - vagrant -c "ssh ood sudo useradd -M -s '/bin/bash' -u $uid -U -c \'$fname\' $uname"
 echo "--> User Created."
-
